@@ -1,0 +1,49 @@
+﻿@using Entity.ViewModels
+
+@{
+    ViewData["Title"] = "ReturnBook";
+    Layout = "~/Views/Shared/_LayoutBook.cshtml";
+}
+@model IEnumerable<BorrowViewModel>
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Simple Datatable
+        </div>
+        <div class="card-body">
+            <table class="table table-striped" id="table1">
+                <thead>
+                    <tr>
+                        <th>Kitap Adı</th>
+                        <th>Ödünç tarihi</th>
+                        <th>İşlem</th>
+                        
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.BookName</td>
+                            <td>@item.BorrowDate</td>
+                            
+
+                           
+                            <td>
+                                <form asp-action="ReturnBook" method="post">
+                                    <input type="hidden" name="borrowId" value="@item.BorrowId" />
+                                    <button type="submit" class="btn btn-warning">İade Et</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+

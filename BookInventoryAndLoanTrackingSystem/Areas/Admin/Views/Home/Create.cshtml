@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@model BookViewModel
+
+<form asp-action="@ViewContext.RouteData.Values["action"]" asp-controller="Home" method="post">
+    <input type="hidden" asp-for="Id" class="form-control" />
+    <div class="mb-2">
+        <label>Ad</label>
+        <input asp-for="BookName" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Yazar</label>
+        <input asp-for="Writer" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Yayın Yılı</label>
+        <input asp-for="YearOfPublication" type="date" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Stok</label>
+        <input asp-for="StockCount" class="form-control" />
+    </div>
+    <div class="mb-2">
+        <label>Tür</label>
+        <select asp-for="BookTypesId" class="form-control">
+            @foreach (var type in Model.AllBookTypes)
+            {
+                <option value="@type.Id">@type.Name</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Kaydet</button>
+</form>
+

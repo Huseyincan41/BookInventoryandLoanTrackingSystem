@@ -1,0 +1,140 @@
+﻿@using Entity.Entities
+@using Entity.ViewModels
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_LayoutBook.cshtml";
+}
+@model IEnumerable<BookViewModel>
+<body>
+
+   
+   @*  <form method="get" asp-action="Index" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Kitap adıyla ara..." value="@Context.Request.Query["search"]" />
+            <button type="submit" class="btn btn-primary">Ara</button>
+        </div>
+    </form> *@
+    <form method="get" asp-action="Index">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Kitap adına göre ara" />
+            </div>
+
+            <div class="col-md-3">
+                <select name="writerFilter" class="form-control">
+                    <option value="">Yazar Seçin</option>
+                    @foreach (var writer in ViewBag.Writers as List<string>)
+                    {
+                        <option value="@writer">@writer</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select name="bookTypeId" class="form-control">
+                    <option value="0">Tür Seçin</option>
+                    @foreach (var type in ViewBag.BookTypes as List<BookTypes>)
+                    {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+            <select name="stockOrder" class="form-control">
+                <option value="">Stoka göre sırala</option>
+                    <option value="asc">@(ViewBag.CurrentStockOrder == "asc" ? "selected" : "")Artan</option>
+                    <option value="desc">@(ViewBag.CurrentStockOrder == "desc" ? "selected" : "")Azalan</option>
+            </select>
+        </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Filtrele</button>
+            </div>
+        </div>
+    </form>
+        <div class="page-heading">
+                <div class="page-title">
+                    <div class="row">
+                        <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Kitap Listesi</h3>
+                            
+                        </div>
+                        <div class="col-12 col-md-6 order-md-2 order-first">
+                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Kitap Listesi</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <section class="section">
+                    <div class="card">
+                       
+                        <div class="card-body">
+                            <table class="table table-striped" id="table1">
+                                <thead>
+                                    <tr>
+                                        <th>Kitap Adı</th>
+                                        <th>Kitap Yazarı</th>
+                                        <th>Kitap Yazım Yılı</th>
+                                        <th>Kitap türü</th>
+                                        <th>Kitap Stok Adeti</th>
+                                        <th>Kitap Aktiflik</th>
+                                        <th></th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.BookName</td>
+                                        <td>@item.Writer</td>
+                                        <td>@item.YearOfPublication</td>
+                                        <td>@item.BookTypeName</td>
+                                        <td>@item.StockCount</td>
+                                        
+                                        <td>
+                                            <span class="badge bg-success">Active</span>
+                                        </td>
+                                        <td>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <form asp-action="Borrow" method="post">
+                                                    <input type="hidden" name="bookId" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-primary" @(item.StockCount == 0 ? "disabled" : "")>Ödünç Al</button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Login" asp-controller="Account">Giriş Yap</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                    
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+            </div>
+        
+    @* <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <script src="assets/vendors/simple-datatables/simple-datatables.js"></script>
+    <script>
+        // Simple Datatable
+        let table1 = document.querySelector('#table1');
+        let dataTable = new simpleDatatables.DataTable(table1);
+    </script>
+
+    <script src="assets/js/main.js"></script> *@
+</body>

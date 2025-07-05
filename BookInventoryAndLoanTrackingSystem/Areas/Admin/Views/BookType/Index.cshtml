@@ -1,0 +1,45 @@
+﻿@using Entity.Entities
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model IEnumerable<BookTypes>
+<a asp-action="Create" asp-controller="BookType" class="btn btn-primary mb-2">Yeni Tür Ekle</a>
+    <section class="section">
+<div class="card">
+    <div class="card-header">
+        Simple Datatable
+    </div>
+    <div class="card-body">
+        <table class="table table-striped" id="table1">
+            <thead>
+                <tr>
+                    <th>Kitap Türü</th>
+                    <th>İşlem</th>
+                    
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        
+
+                        
+                        <td>
+                            <a asp-action="Edit" asp-controller="BookType" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Güncelle</a>
+                        </td>
+                        
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+            </section>
