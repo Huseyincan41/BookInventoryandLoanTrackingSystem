@@ -25,15 +25,7 @@ namespace Data.Context
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
-            //    builder.Entity<Borrow>()
-            //.HasOne(bb => bb.Books)
-            //.WithMany()
-            //.HasForeignKey(bb => bb.BookId);
-
-            //    builder.Entity<Borrow>()
-            //        .HasOne(bb => bb.UserId)
-            //        .WithMany()
-            //        .HasForeignKey(bb => bb.UserId);
+            
            builder.Entity<Borrow>()
     .HasOne(b => b.Book)
     .WithMany()

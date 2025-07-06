@@ -3,6 +3,7 @@ using Entity.Models;
 using Entity.Services;
 using Entity.UnitOfWorks;
 using Entity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Service.Services;
@@ -10,6 +11,7 @@ using Service.Services;
 namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    //[Authorize(Roles = "SuperAdmin,Admin")]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

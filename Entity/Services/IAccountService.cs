@@ -20,5 +20,8 @@ namespace Entity.Services
 		Task<RoleViewModel> FindRoleByIdAsync(string id);
 		Task<string> EditRoleListAsync(EditRoleViewModel model);
 		Task SignOutAsync();
-	}
+        Task<UserViewModel> GetUserByIdAsync(int id);
+        Task<string> UpdateUserAsync(UserViewModel model);
+        Task<string> DeleteUserAsync(int id);
+    }
 }

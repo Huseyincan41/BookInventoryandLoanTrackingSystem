@@ -16,7 +16,7 @@
 </head>
 <body>
     <div id="app">
-        <!-- Sidebar -->
+        
         <div id="sidebar" class="active">
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header">
@@ -46,13 +46,19 @@
                                 <span>Kitaplarım</span>
                             </a>
                         </li>
+                        <li class="sidebar-item ">
+                            <a asp-controller="Account" asp-action="Logout" class="sidebar-link">
+                                <i class="bi bi-book"></i>
+                                <span>Çıkış</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
 
-        <!-- İçerik -->
+       
         <div id="main" class="layout-navbar">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -75,7 +81,7 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+    
     <script src="~/themes/dist/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="~/themes/dist/assets/js/bootstrap.bundle.min.js"></script>
     <script src="~/themes/dist/assets/js/main.js"></script>

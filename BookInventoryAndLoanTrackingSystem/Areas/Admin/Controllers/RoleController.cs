@@ -1,6 +1,7 @@
 ﻿using Data.Identity;
 using Entity.Services;
 using Entity.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,13 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
         private readonly IAccountService _accountService;
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
-        public RoleController(IAccountService accountService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        private readonly ILogger<RoleController> _logger;
+        public RoleController(IAccountService accountService, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ILogger<RoleController> logger)
         {
             _accountService = accountService;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            _logger = logger;
         }
         //[Authorize(Roles = "SuperAdmin,Admin")]
         public async Task<IActionResult> Index()
@@ -39,15 +42,18 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
             string msg = await _accountService.FindByNameAsync(model);
             if (msg == "Kullanıcı bulunamadı!")
             {
+                _logger.LogWarning("Giriş başarısız: Kullanıcı bulunamadı. Kullanıcı adı: {UserName}", model.UserName);
                 ModelState.AddModelError("", msg);
                 return View(model);
             }
             else if (msg == "OK")
             {
+                _logger.LogInformation("Giriş başarılı. Kullanıcı adı: {UserName}", model.UserName);
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
             else
             {
+                _logger.LogWarning("Giriş başarısız: Şifre hatalı. Kullanıcı adı: {UserName}", model.UserName);
                 ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı");
             }
             return View(model);
@@ -90,6 +96,48 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
         {
             var users = await _accountService.GetAllUsers();
             return View(users);
+        }
+        public async Task<IActionResult> EditUser(int id)
+        {
+            var model = await _accountService.GetUserByIdAsync(id);
+            if (model == null)
+            {
+                TempData["ErrorMessage"] = "Kullanıcı bulunamadı!";
+                return RedirectToAction("Users");
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(UserViewModel model)
+        {
+            string result = await _accountService.UpdateUserAsync(model);
+            if (result != "OK")
+            {
+                _logger.LogWarning("Kullanıcı güncellenemedi. Id: {UserId}, Hata: {Error}", model.Id, result);
+                ModelState.AddModelError("", result);
+                return View(model);
+            }
+            _logger.LogInformation("Kullanıcı güncellendi. Id: {UserId}, Kullanıcı Adı: {UserName}", model.Id, model.UserName);
+            TempData["SuccessMessage"] = "Kullanıcı başarıyla güncellendi.";
+            return RedirectToAction("Users");
+        }
+
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            string result = await _accountService.DeleteUserAsync(id);
+            if (result == "OK")
+            {
+                _logger.LogInformation("Kullanıcı silindi. Id: {UserId}", id);
+                TempData["SuccessMessage"] = "Kullanıcı silindi.";
+            }
+            else
+            {
+                _logger.LogWarning("Kullanıcı silinemedi. Id: {UserId}, Hata: {Error}", id, result);
+                TempData["ErrorMessage"] = result;
+            }
+
+            return RedirectToAction("Users");
         }
     }
 }

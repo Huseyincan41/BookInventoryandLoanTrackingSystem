@@ -34,7 +34,7 @@
                         <li class="sidebar-title">Menü</li>
 
                         <li class="sidebar-item">
-                            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="sidebar-link">
+                            <a asp-controller="Home" asp-action="Index" asp-area="Admin" class="sidebar-link">
                                 <i class="bi bi-house-door-fill"></i>
                                 <span>Ana Sayfa</span>
                             </a>
@@ -51,6 +51,18 @@
                             <a asp-controller="Role" asp-action="Users" class="sidebar-link">
                                 <i class="bi bi-book"></i>
                                 <span>Kullanıcılar</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item ">
+                            <a asp-controller="Role" asp-action="Index" class="sidebar-link">
+                                <i class="bi bi-book"></i>
+                                <span>Rol Listesi</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item ">
+                            <a asp-controller="Account" asp-action="Logout" class="sidebar-link">
+                                <i class="bi bi-book"></i>
+                                <span>Çıkış</span>
                             </a>
                         </li>
                     </ul>

@@ -1,6 +1,7 @@
 ﻿using Entity.Entities;
 using Entity.Services;
 using Entity.UnitOfWorks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Service.Services;
@@ -8,6 +9,7 @@ using Service.Services;
 namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    //[Authorize(Roles = "SuperAdmin,Admin")]
     public class BookTypeController : Controller
     {
         private readonly IBookTypesService _bookTypesService;

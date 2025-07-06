@@ -5,16 +5,14 @@
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit</h1>
 
-<h4>BookTypes</h4>
-<hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" asp-controller="BookType" method="post">
             <input type="hidden" asp-for="Id" class="form-control" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label>Tür Adı</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>

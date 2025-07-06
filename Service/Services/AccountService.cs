@@ -179,5 +179,46 @@ namespace Service.Services
 			}
 			return msg;
 		}
-	}
+        public async Task<UserViewModel> GetUserByIdAsync(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null) return null;
+
+            return new UserViewModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.Surname,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                
+            };
+        }
+
+        public async Task<string> UpdateUserAsync(UserViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
+            if (user == null) return "Kullanıcı bulunamadı!";
+
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded ? "OK" : string.Join(", ", result.Errors.Select(e => e.Description));
+        }
+
+        public async Task<string> DeleteUserAsync(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null) return "Kullanıcı bulunamadı!";
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded ? "OK" : string.Join(", ", result.Errors.Select(e => e.Description));
+        }
+    }
 }

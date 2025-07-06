@@ -97,8 +97,18 @@ namespace Service.Services
                 ImagePath = imagePath,
                 
             };
-            await repo.Add(newBook);
-            await _unitOfWork.CommitAsync();
+
+            try
+            {
+                await repo.Add(newBook);
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception)
+            {
+
+                _logger.LogInformation($"Kitap Eklenirken Hata Oluştu: {model}");
+            }
+
             _logger.LogInformation($"Kitap eklendi: {model.BookName} - ID: {model.Id}");
         }
 

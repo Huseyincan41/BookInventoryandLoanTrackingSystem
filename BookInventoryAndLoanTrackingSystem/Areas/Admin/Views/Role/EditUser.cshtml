@@ -1,0 +1,46 @@
+﻿@model UserViewModel
+@{
+    ViewData["Title"] = "EditUser";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Kullanıcıyı Güncelle</h2>
+<hr />
+
+<form asp-action="EditUser" asp-controller="Role" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Ad</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Soyad</label>
+        <input asp-for="Surname" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Kullanıcı Adı</label>
+        <input asp-for="UserName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Eposta</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Telefon Numarası</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Adres</label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a asp-action="Users" class="btn btn-secondary">İptal</a>
+</form>
+
