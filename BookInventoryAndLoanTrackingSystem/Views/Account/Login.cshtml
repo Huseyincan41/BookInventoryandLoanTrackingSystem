@@ -5,55 +5,75 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model LoginViewModel
-<div class="row h-100">
-    <div class="col-lg-5 col-12">
-        <div id="auth-left">
-            <div class="auth-logo">
-                <a href="index.html"><img src="~/themes/dist/assets/images/logo/logo.png" alt="Logo"></a>
-            </div>
-            <h1 class="auth-title">Log in.</h1>
-            <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
 
-            <form asp-controller="Account" asp-action="Login" method="post">
-                <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
-                
-                <div class="form-group position-relative has-icon-left mb-4">
-                    <input asp-for="UserName" type="text" class="form-control form-control-xl" placeholder="Username">
-                    <div class="form-control-icon">
-                        <i class="bi bi-person"></i>
-                    </div>
-                </div>
-                <div class="form-group position-relative has-icon-left mb-4">
-                    <input asp-for="Password" type="password" class="form-control form-control-xl" placeholder="Password">
-                    <div class="form-control-icon">
-                        <i class="bi bi-shield-lock"></i>
-                    </div>
-                </div>
-                <div class="form-check form-check-lg d-flex align-items-end">
-                    <input asp-for="RememberMe" class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label text-gray-600" for="flexCheckDefault">
-                        Keep me logged in
-                    </label>
-                </div>
-                <div class="col-md-12 form-group">
-                    <button type="submit" value="submit" class="button button-login w-100">Giriş Yap</button>
 
-                </div>
-            </form>
-            <div class="text-center mt-5 text-lg fs-4">
-                <p class="text-gray-600">
-                    Don't have an account? <a  asp-action="Register" asp-controller="Account" class="font-bold">
-                        Sign
-                        up
-                    </a>.
-                </p>
-                <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
-            </div>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <img src="~/themes/dist/assets/images/logo/logo.png" alt="Logo" style="max-height: 60px;" />
         </div>
-    </div>
-    <div class="col-lg-7 d-none d-lg-block">
-        <div id="auth-right">
+
+        <form asp-controller="Account" asp-action="Login" method="post">
+            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+            <div class="form-group position-relative has-icon-left mb-4">
+                <input asp-for="UserName" type="text" class="form-control form-control-xl" placeholder="Kullanıcı Adı">
+                <div class="form-control-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-4">
+                <input asp-for="Password" type="password" class="form-control form-control-xl" placeholder="Şifre">
+                <div class="form-control-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Oturumu Açık Tut</label>
+            </div>
+
+            <button type="submit" class="button-login w-100">Giriş Yap</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <p>Hesabınız yok mu? <a asp-action="Register" asp-controller="Account">Kayıt Ol</a></p>
         </div>
     </div>
 </div>
 
+
+
+<style>
+    .auth-container {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 450px;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-login {
+        background-color: #4e73df;
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        font-weight: bold;
+        border-radius: 6px;
+    }
+
+        .button-login:hover {
+            background-color: #2e59d9;
+        }
+</style>

@@ -133,6 +133,7 @@ namespace Service.Services
 			}
 			UserInOrOutViewModel model = new UserInOrOutViewModel()
 			{
+				
 				Role = role,
 				UsersInRole = _mapper.Map<List<UserViewModel>>(usersInRole),
 				UsersOutRole = _mapper.Map<List<UserViewModel>>(usersOutRole)

@@ -6,11 +6,15 @@
 
 @model BookViewModel
 
-<form asp-action="@ViewContext.RouteData.Values["action"]" asp-controller="Home" method="post">
+<form asp-action="@ViewContext.RouteData.Values["action"]" asp-controller="Home" enctype="multipart/form-data" method="post">
     <input type="hidden" asp-for="Id" class="form-control" />
     <div class="mb-2">
         <label>Ad</label>
         <input asp-for="BookName" class="form-control" />
+    </div>
+    <div>
+        <label>Kapak Resmi</label>
+        <input type="file"  asp-for="ImageFile" />
     </div>
     <div class="mb-2">
         <label>Yazar</label>
@@ -18,12 +22,13 @@
     </div>
     <div class="mb-2">
         <label>Yayın Yılı</label>
-        <input asp-for="YearOfPublication" type="date" class="form-control" />
+        <input asp-for="YearOfPublication" type="date" class="form-control" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
     </div>
     <div class="mb-2">
         <label>Stok</label>
         <input asp-for="StockCount" class="form-control" />
     </div>
+
     <div class="mb-2">
         <label>Tür</label>
         <select asp-for="BookTypesId" class="form-control">

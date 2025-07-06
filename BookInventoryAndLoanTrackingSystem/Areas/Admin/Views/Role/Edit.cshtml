@@ -27,8 +27,8 @@
                     @foreach (var user in Model.UsersInRole)
                     {
                         <tr>
-                            <td>@user.FirstName</td>
-                            <td>@user.LastName</td>
+                            <td>@user.Name</td>
+                            <td>@user.Surname</td>
                             <td>@user.UserName</td>
                             <td>@user.Email</td>
                             <td>
@@ -64,8 +64,8 @@
                     @foreach (var user in Model.UsersOutRole)
                     {
                         <tr>
-                            <td>@user.FirstName</td>
-                            <td>@user.LastName</td>
+                            <td>@user.Name</td>
+                            <td>@user.Surname</td>
                             <td>@user.UserName</td>
                             <td>@user.Email</td>
                             <td>

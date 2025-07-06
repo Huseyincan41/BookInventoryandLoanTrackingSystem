@@ -86,5 +86,10 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
             }
             return RedirectToAction("Edit", "Role", new { id = model.RoleId, area = "Admin" });
         }
+        public async Task<IActionResult> Users()
+        {
+            var users = await _accountService.GetAllUsers();
+            return View(users);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Entity.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace Entity.ViewModels
         //public BookTypes BookTypes { get; set; }
 		public int StockCount { get; set; }
         public int BookTypesId { get; set; }
+        public string? ImagePath { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public List<BookTypes> AllBookTypes { get; set; }
 
     }

@@ -1,6 +1,7 @@
 ﻿using BookInventoryAndLoanTrackingSystem.Models;
 using Data.Identity;
 using Entity.Entities;
+using Entity.Models;
 using Entity.Services;
 using Entity.UnitOfWorks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,8 @@ using System.Diagnostics;
 
 namespace BookInventoryAndLoanTrackingSystem.Controllers
 {
-	public class HomeController : Controller
+    [Authorize]
+    public class HomeController : Controller
 	{
         private readonly IUnitOfWork _unitOfWork;
 
@@ -28,63 +30,52 @@ namespace BookInventoryAndLoanTrackingSystem.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index(string search, string writerFilter, int? bookTypeId, string stockOrder)
-		{
+        public async Task<IActionResult> Index(BookFilterModel filter)
+        {
+            var booksPaged = await _bookService.GetFilteredBooksAsync(filter);
+            ViewBag.BookTypes = (await _unitOfWork.GetRepository<BookTypes>().GetAllAsync()).ToList();
 
-            
-
-            var allBooks = await _bookService.GetAllAsync();
-
-            // ViewBag'lere filtre uygulanmadan önceki verileri ata
-            ViewBag.Writers = allBooks
+            ViewBag.Writers = booksPaged.Items
                 .Where(b => !string.IsNullOrWhiteSpace(b.Writer))
                 .Select(b => b.Writer)
                 .Distinct()
                 .ToList();
 
-            ViewBag.BookTypes = (await _unitOfWork.GetRepository<BookTypes>().GetAllAsync()).ToList();
+            ViewBag.CurrentStockOrder = filter.StockOrder;
 
-            // Filtreleri uygula
-            var books = allBooks;
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                books = books.Where(b =>
-                    !string.IsNullOrEmpty(b.BookName) &&
-                    b.BookName.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(writerFilter))
-            {
-                books = books.Where(b =>
-                    !string.IsNullOrEmpty(b.Writer) &&
-                    b.Writer.Contains(writerFilter, StringComparison.OrdinalIgnoreCase)).ToList();
-            }
-
-            if (bookTypeId.HasValue && bookTypeId.Value != 0)
-            {
-                books = books.Where(b => b.BookTypesId == bookTypeId.Value).ToList();
-            }
-            if (!string.IsNullOrEmpty(stockOrder))
-            {
-                if (stockOrder == "asc")
-                    books = books.OrderBy(b => b.StockCount).ToList();
-                else if (stockOrder == "desc")
-                    books = books.OrderByDescending(b => b.StockCount).ToList();
-            }
-
-            ViewBag.CurrentStockOrder = stockOrder;
-            return View(books);
+            return View(booksPaged);
         }
-        
+
+
         [HttpPost]
         public async Task<IActionResult> Borrow(int bookId)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
                 return RedirectToAction("Login", "Account");
+            try
+            {
+                await _borrowService.BorrowBookAsync(bookId, user.Id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["BorrowError"] = ex.Message;
+            }
+            var book = await _bookService.GetByIdAsync(bookId);
+            if (book == null)
+            {
+                TempData["ErrorMessage"] = "Kitap bulunamadı.";
+                return RedirectToAction("Index");
+            }
 
-            await _borrowService.BorrowBookAsync(bookId, user.Id);
+            if (book.StockCount == 0)
+            {
+                TempData["ErrorMessage"] = "Bu kitap şu anda stokta yok.";
+                return RedirectToAction("Index");
+            }
+            
+            TempData["SuccessMessage"] = "Kitap başarıyla ödünç alındı.";
+
             return RedirectToAction("Index");
         }
         [HttpPost]

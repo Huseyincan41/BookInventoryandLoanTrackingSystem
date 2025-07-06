@@ -37,8 +37,9 @@ namespace BookInventoryAndLoanTrackingSystem.Controllers
 			}
 			else if (msg == "OK")
 			{
-				return Redirect(model.ReturnUrl ?? "~/");
-			}
+				//return Redirect(model.ReturnUrl ?? "~/");
+                return RedirectToAction("Index","Home");
+            }
 			else
 			{
 				ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı");

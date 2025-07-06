@@ -10,9 +10,9 @@ namespace Entity.ViewModels
 	{
 		public int Id { get; set; }
 		//[Required(ErrorMessage = "İsim alanı boş geçilemez")]
-		public string FirstName { get; set; }
+		public string Name { get; set; }
 		//[Required(ErrorMessage = "Soy isim alanı boş geçilemez")]
-		public string LastName { get; set; }
+		public string Surname { get; set; }
 
 		//[Required(ErrorMessage = "Kullanıcı adı boş geçilemez")]
 		public string UserName { get; set; }

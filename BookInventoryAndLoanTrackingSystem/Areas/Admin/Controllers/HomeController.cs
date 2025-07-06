@@ -1,4 +1,5 @@
 ﻿using Entity.Entities;
+using Entity.Models;
 using Entity.Services;
 using Entity.UnitOfWorks;
 using Entity.ViewModels;
@@ -22,10 +23,25 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var books = await _bookService.GetAllAsync();
+        //    return View(books);
+        //}
+        public async Task<IActionResult> Index(BookFilterModel filter)
         {
-            var books = await _bookService.GetAllAsync();
-            return View(books);
+            var booksPaged = await _bookService.GetFilteredBooksAsync(filter);
+            ViewBag.BookTypes = (await _unitOfWork.GetRepository<BookTypes>().GetAllAsync()).ToList();
+
+            ViewBag.Writers = booksPaged.Items
+                .Where(b => !string.IsNullOrWhiteSpace(b.Writer))
+                .Select(b => b.Writer)
+                .Distinct()
+                .ToList();
+
+            ViewBag.CurrentStockOrder = filter.StockOrder;
+
+            return View(booksPaged);
         }
         public async Task<IActionResult> Create()
         {
@@ -46,7 +62,7 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
             }
 
             await _bookService.AddAsync(model);
-            return RedirectToAction("Index");
+            return RedirectToAction("Home", "Admin");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -65,13 +81,14 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
             }
 
             await _bookService.UpdateAsync(model);
-            return RedirectToAction("Index");
+            return RedirectToAction("Home", "Admin");
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             await _bookService.DeleteAsync(id);
-            return RedirectToAction("Index");
+            return RedirectToAction("Home", "Admin");
         }
+
     }
 }

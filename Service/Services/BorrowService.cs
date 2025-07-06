@@ -32,11 +32,18 @@ namespace Service.Services
         {
             var bookRepo = _unitOfWork.GetRepository<Books>();
             var borrowRepo = _unitOfWork.GetRepository<Borrow>();
-
+            var existingBorrow = await _unitOfWork
+    .GetRepository<Borrow>()
+    .GetByFilterAsync(b => b.BookId == bookId && b.UserId == userId.ToString() && !b.IsReturned);
+            if (existingBorrow != null)
+            {
+                throw new InvalidOperationException("Bu kitabı zaten ödünç aldınız ve henüz iade etmediniz.");
+            }
             var book = await _unitOfWork.GetRepository<Books>().GetByIdAsync(bookId);
             if (book == null || book.StockCount <= 0)
                 throw new Exception("Book not found or out of stock.");
 
+            
             book.StockCount -= 1;
             bookRepo.Update(book);
 

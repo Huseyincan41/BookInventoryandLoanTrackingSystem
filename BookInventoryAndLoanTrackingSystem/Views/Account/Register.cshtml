@@ -5,104 +5,87 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model RegisterViewModel
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Mazer Admin Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="stylesheet" href="assets/css/pages/auth.css">
-</head>
+<style>
+    .auth-container {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-<body>
-    <div id="auth">
+    .auth-card {
+        width: 100%;
+        max-width: 500px;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
 
-        <div class="row h-100">
-            <div class="col-lg-5 col-12">
-                <div id="auth-left">
-                    <div class="auth-logo">
-                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Logo"></a>
-                    </div>
-                    <h1 class="auth-title">Sign Up</h1>
-                    <p class="auth-subtitle mb-5">Input your data to register to our website.</p>
+    .button-register {
+        background-color: #4e73df;
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        font-weight: bold;
+        border-radius: 6px;
+    }
 
-                    <form asp-action="Register" asp-controller="Account" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="FirstName" type="text" class="form-control form-control-xl" placeholder="Ad">
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-envelope"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="LastName" type="text" class="form-control form-control-xl" placeholder="Soyad">
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-person"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="UserName" type="text" class="form-control form-control-xl" placeholder="Kullanıcı Adı">
-                            <span asp-validation-for="UserName" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="PhoneNumber" type="text" class="form-control form-control-xl" placeholder="Telefon Numarası">
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="Email" type="text" class="form-control form-control-xl" placeholder="Email">
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="Password" type="text" class="form-control form-control-xl" placeholder="Şifre">
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        <div class="form-group position-relative has-icon-left mb-4">
-                            <input asp-for="ConfirmPassword" type="text" class="form-control form-control-xl" placeholder="Şifre Tekrar">
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                            <div class="form-control-icon">
-                                <i class="bi bi-shield-lock"></i>
-                            </div>
-                        </div>
-                        
-                        <button class="btn btn-primary btn-block btn-lg shadow-lg mt-5" value="submit" type="submit">Kaydet</button>
-                    </form>
-                    <div class="text-center mt-5 text-lg fs-4">
-                        <p class='text-gray-600'>
-                            Already have an account? <a href="auth-login.html"
-                                                        class="font-bold">
-                                Log
-                                in
-                            </a>.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-7 d-none d-lg-block">
-                <div id="auth-right">
-                </div>
-            </div>
+        .button-register:hover {
+            background-color: #2e59d9;
+        }
+</style>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <img src="~/themes/dist/assets/images/logo/logo.png" alt="Logo" style="max-height: 60px;" />
         </div>
 
+        <form asp-action="Register" asp-controller="Account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input asp-for="FirstName" type="text" class="form-control" placeholder="Ad">
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input asp-for="LastName" type="text" class="form-control" placeholder="Soyad">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input asp-for="UserName" type="text" class="form-control" placeholder="Kullanıcı Adı">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input asp-for="PhoneNumber" type="text" class="form-control" placeholder="Telefon Numarası">
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input asp-for="Email" type="email" class="form-control" placeholder="Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-3">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Şifre">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group position-relative has-icon-left mb-4">
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Şifre Tekrar">
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button class="button-register w-100" type="submit">Kayıt Ol</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <p>Zaten hesabın var mı? <a asp-action="Login" asp-controller="Account">Giriş Yap</a></p>
+        </div>
     </div>
-</body>
-
-</html>
-
+</div>

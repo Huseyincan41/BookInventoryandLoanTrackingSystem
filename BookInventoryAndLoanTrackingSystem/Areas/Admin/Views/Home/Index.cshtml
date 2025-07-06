@@ -1,10 +1,11 @@
-﻿@using Entity.ViewModels
+﻿@using Entity.Entities
+@using Entity.ViewModels
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
-@model IEnumerable<BookViewModel>
+@model PagedViewModel<BookViewModel>
 <body>
 
     <div id="app">
@@ -27,6 +28,49 @@
                     </div>
                 </div>
             </div>
+            <form method="get" asp-action="Index" class="mb-4">
+                <div class="row g-2 align-items-end">
+                    <div class="col-md-3">
+                        <label for="search" class="form-label">Kitap Adı</label>
+                        <input type="text" name="search" class="form-control" placeholder="Kitap adına göre ara" value="@Context.Request.Query["search"]" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="writerFilter" class="form-label">Yazar</label>
+                        <select name="writerFilter" class="form-select">
+                            <option value="">Yazar Seçin</option>
+                            @foreach (var writer in ViewBag.Writers as List<string>)
+                            {
+                                <option value="@writer">@writer</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="bookTypeId" class="form-label">Tür</label>
+                        <select name="bookTypeId" class="form-select">
+                            <option value="0">Tür Seçin</option>
+                            @foreach (var type in ViewBag.BookTypes as List<BookTypes>)
+                            {
+                                <option value="@type.Id">@type.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="stockOrder" class="form-label">Stok Sıralama</label>
+                        <select name="stockOrder" class="form-select">
+                            <option value="">Stoka göre sırala</option>
+                            <option value="asc">@(ViewBag.CurrentStockOrder == "asc" ? "selected" : "")Artan</option>
+                            <option value="desc">@(ViewBag.CurrentStockOrder == "desc" ? "selected" : "")Azalan</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+                    </div>
+                </div>
+            </form>
             <a asp-action="Create" class="btn btn-primary mb-2">Yeni Kitap Ekle</a>
             <section class="section">
                 <div class="card">
@@ -37,6 +81,7 @@
                         <table class="table table-striped" id="table1">
                             <thead>
                                 <tr>
+                                    <th>Kitap Resmi</th>
                                     <th>Kitap Adı</th>
                                     <th>Kitap Yazarı</th>
                                     <th>Kitap Yazım Yılı</th>
@@ -49,9 +94,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.Items)
                                 {
                                     <tr>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.ImagePath))
+                                            {
+                                                <img src="@item.ImagePath" alt="Kitap Görseli" width="70" height="90" style="object-fit:cover;" />
+                                            }
+                                            else
+                                            {
+                                                <span>-</span>
+                                            }
+                                        </td>
                                         <td>@item.BookName</td>
                                         <td>@item.Writer</td>
                                         <td>@item.YearOfPublication</td>

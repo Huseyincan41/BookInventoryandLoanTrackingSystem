@@ -17,6 +17,7 @@ builder.Services.AddDbContext<BookDbContext>(options => options.UseSqlServer(bui
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddExtensions();
 builder.Host.UseSerilog();
+
 builder.Services.AddSession(options =>
 {
 	options.IdleTimeout = TimeSpan.FromMinutes(10);
@@ -26,7 +27,11 @@ builder.Services.AddSession(options =>
 		   );
 
 var app = builder.Build();
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<BookDbContext>();
+    dbContext.Database.Migrate();
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -44,7 +49,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}");
+	pattern: "{controller=Account}/{action=Login}/{id?}");
 app.MapControllerRoute(
      name: "areas",
        pattern: "{controller=Home}/{action=Index}/{id?}/{area=Admin}");

@@ -1,140 +1,168 @@
 ﻿@using Entity.Entities
 @using Entity.ViewModels
 
+@model PagedViewModel<BookViewModel>
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Kitap Listesi";
     Layout = "~/Views/Shared/_LayoutBook.cshtml";
 }
-@model IEnumerable<BookViewModel>
-<body>
 
-   
-   @*  <form method="get" asp-action="Index" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Kitap adıyla ara..." value="@Context.Request.Query["search"]" />
-            <button type="submit" class="btn btn-primary">Ara</button>
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (TempData["BorrowError"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["BorrowError"]
+    </div>
+}
+
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-3">
+            <label for="search" class="form-label">Kitap Adı</label>
+            <input type="text" name="search" class="form-control" placeholder="Kitap adına göre ara" value="@Context.Request.Query["search"]" />
         </div>
-    </form> *@
-    <form method="get" asp-action="Index">
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Kitap adına göre ara" />
-            </div>
 
-            <div class="col-md-3">
-                <select name="writerFilter" class="form-control">
-                    <option value="">Yazar Seçin</option>
-                    @foreach (var writer in ViewBag.Writers as List<string>)
-                    {
-                        <option value="@writer">@writer</option>
-                    }
-                </select>
-            </div>
-
-            <div class="col-md-3">
-                <select name="bookTypeId" class="form-control">
-                    <option value="0">Tür Seçin</option>
-                    @foreach (var type in ViewBag.BookTypes as List<BookTypes>)
-                    {
-                        <option value="@type.Id">@type.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="col-md-3">
-            <select name="stockOrder" class="form-control">
-                <option value="">Stoka göre sırala</option>
-                    <option value="asc">@(ViewBag.CurrentStockOrder == "asc" ? "selected" : "")Artan</option>
-                    <option value="desc">@(ViewBag.CurrentStockOrder == "desc" ? "selected" : "")Azalan</option>
+        <div class="col-md-3">
+            <label for="writerFilter" class="form-label">Yazar</label>
+            <select name="writerFilter" class="form-select">
+                <option value="">Yazar Seçin</option>
+                @foreach (var writer in ViewBag.Writers as List<string>)
+                {
+                    <option value="@writer">@writer</option>
+                }
             </select>
         </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Filtrele</button>
+
+        <div class="col-md-2">
+            <label for="bookTypeId" class="form-label">Tür</label>
+            <select name="bookTypeId" class="form-select">
+                <option value="0">Tür Seçin</option>
+                @foreach (var type in ViewBag.BookTypes as List<BookTypes>)
+                {
+                    <option value="@type.Id">@type.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <label for="stockOrder" class="form-label">Stok Sıralama</label>
+            <select name="stockOrder" class="form-select">
+                <option value="">Stoka göre sırala</option>
+                <option value="asc">@(ViewBag.CurrentStockOrder == "asc" ? "selected" : "")Artan</option>
+                <option value="desc">@(ViewBag.CurrentStockOrder == "desc" ? "selected" : "")Azalan</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+        </div>
+    </div>
+</form>
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Kitap Listesi</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Kitap Listesi</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-    </form>
-        <div class="page-heading">
-                <div class="page-title">
-                    <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Kitap Listesi</h3>
-                            
-                        </div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Kitap Listesi</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-                <section class="section">
-                    <div class="card">
-                       
-                        <div class="card-body">
-                            <table class="table table-striped" id="table1">
-                                <thead>
-                                    <tr>
-                                        <th>Kitap Adı</th>
-                                        <th>Kitap Yazarı</th>
-                                        <th>Kitap Yazım Yılı</th>
-                                        <th>Kitap türü</th>
-                                        <th>Kitap Stok Adeti</th>
-                                        <th>Kitap Aktiflik</th>
-                                        <th></th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>@item.BookName</td>
-                                        <td>@item.Writer</td>
-                                        <td>@item.YearOfPublication</td>
-                                        <td>@item.BookTypeName</td>
-                                        <td>@item.StockCount</td>
-                                        
-                                        <td>
-                                            <span class="badge bg-success">Active</span>
-                                        </td>
-                                        <td>
-                                            @if (User.Identity.IsAuthenticated)
-                                            {
-                                                <form asp-action="Borrow" method="post">
-                                                    <input type="hidden" name="bookId" value="@item.Id" />
-                                                    <button type="submit" class="btn btn-primary" @(item.StockCount == 0 ? "disabled" : "")>Ödünç Al</button>
-                                                </form>
-                                            }
-                                            else
-                                            {
-                                                <a asp-action="Login" asp-controller="Account">Giriş Yap</a>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                                    
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    </div>
 
-                </section>
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped" id="table1">
+                    <thead>
+                        <tr>
+                            <th>Kitap Resmi</th>
+                            <th>Adı</th>
+                            <th>Yazar</th>
+                            <th>Yılı</th>
+                            <th>Tür</th>
+                            <th>Stok</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                                    {
+                                        <img src="@item.ImagePath" alt="Kitap Görseli" width="70" height="90" style="object-fit:cover;" />
+                                    }
+                                    else
+                                    {
+                                        <span>-</span>
+                                    }
+                                </td>
+                                <td>@item.BookName</td>
+                                <td>@item.Writer</td>
+                                <td>@item.YearOfPublication</td>
+                                <td>@item.BookTypeName</td>
+                                <td>@item.StockCount</td>
+                                <td>
+                                    @if (item.StockCount > 0)
+                                    {
+                                        <span class="badge bg-success">Stokta Var</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Stok Yok</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <form asp-action="Borrow" method="post">
+                                            <input type="hidden" name="bookId" value="@item.Id" />
+                                            <button type="submit" class="btn btn-primary" @(item.StockCount == 0 ? "disabled" : "")>Ödünç Al</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Login" asp-controller="Account">Giriş Yap</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <!-- Sayfalama -->
+                <nav>
+                    <ul class="pagination justify-content-center mt-4">
+                        @for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="?currentPage=@i">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
             </div>
-
-            </div>
-        
-    @* <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-
-    <script src="assets/vendors/simple-datatables/simple-datatables.js"></script>
-    <script>
-        // Simple Datatable
-        let table1 = document.querySelector('#table1');
-        let dataTable = new simpleDatatables.DataTable(table1);
-    </script>
-
-    <script src="assets/js/main.js"></script> *@
-</body>
+        </div>
+    </section>
+</div>

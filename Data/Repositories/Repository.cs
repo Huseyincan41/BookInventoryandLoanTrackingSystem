@@ -1,6 +1,8 @@
 ﻿using Data.Context;
 using Entity.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +16,8 @@ namespace Data.Repositories
 	{
 		private readonly BookDbContext _context;
 		private DbSet<T> _dbSet;
-
-		public Repository(BookDbContext context)
+        private DbSet<T> Table { get => _context.Set<T>(); }
+        public Repository(BookDbContext context)
 		{
 			_context = context;
 			_dbSet = _context.Set<T>();
@@ -48,8 +50,19 @@ namespace Data.Repositories
 			}
 
 		}
+        public IQueryable<T> GetQueryable(Func<IQueryable<T>, IQueryable<T>> include = null, bool enableTracking = true)
+        {
+            IQueryable<T> query = _dbSet;
 
-		public async Task<T> Get(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>> include = null)
+            if (!enableTracking)
+                query = query.AsNoTracking();
+
+            if (include != null)
+                query = include(query);
+
+            return query;
+        }
+        public async Task<T> Get(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>> include = null)
 		{
 			IQueryable<T> query = _dbSet;
 
@@ -107,7 +120,12 @@ namespace Data.Repositories
 			return await query.FirstOrDefaultAsync();
 		}
 
-		public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByFilterAsync(Expression<Func<T, bool>> filter)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(filter);
+        }
+
+        public async Task<T> GetByIdAsync(int id)
 		{
 			return await _dbSet.FindAsync(id);
 
@@ -118,5 +136,42 @@ namespace Data.Repositories
 			_dbSet.Update(entity);
 
 		}
-	}
+        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
+        {
+            if (predicate == null)
+                return await Table.CountAsync();
+
+            return await Table.CountAsync(predicate);
+        }
+        public async Task<IList<T>> GetAllByPagingAsync(
+           Expression<Func<T, bool>>? predicate = null,
+           Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>>? order = null,
+           bool enableTracking = false,
+           int currentPage = 1,
+           int pageSize = 10)
+        {
+            IQueryable<T> query = Table;
+
+            if (!enableTracking)
+                query = query.AsNoTracking();
+
+            if (predicate is not null)
+                query = query.Where(predicate);
+
+            if (include is not null)
+                query = include(query);
+
+            if (order is not null)
+                return await order(query)
+                    .Skip((currentPage - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+            return await query
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+    }
 }

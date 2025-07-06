@@ -39,6 +39,7 @@ namespace Service.Extensions
 
 			services.ConfigureApplicationCookie(opt =>
 			{
+
 				opt.LoginPath = new PathString("/Account/Login");
 				opt.LogoutPath = new PathString("/Account/Logout");
 				//opt.AccessDeniedPath = new PathString("/Account/Accessdenied");
