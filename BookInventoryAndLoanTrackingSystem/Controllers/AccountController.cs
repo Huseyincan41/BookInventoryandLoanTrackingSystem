@@ -40,7 +40,7 @@ namespace BookInventoryAndLoanTrackingSystem.Controllers
 			else if (msg == "OK")
 			{
                 _logger.LogInformation("Kullanıcı giriş yaptı: {UserName}", model.UserName);
-                //return Redirect(model.ReturnUrl ?? "~/");
+               
                 return RedirectToAction("Index","Home");
             }
 			else

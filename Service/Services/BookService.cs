@@ -186,7 +186,7 @@ namespace Service.Services
             var query = _unitOfWork.GetRepository<Books>()
                 .GetQueryable(include: q => q.Include(b => b.BookTypes), enableTracking: false);
 
-            // Filtreleme
+           
             if (!string.IsNullOrWhiteSpace(filter.Search))
             {
                 query = query.Where(b => b.BookName != null && b.BookName.Contains(filter.Search));
@@ -202,7 +202,7 @@ namespace Service.Services
                 query = query.Where(b => b.BookTypesId == filter.BookTypeId.Value);
             }
 
-            // Sıralama
+            
             if (filter.StockOrder == "asc")
             {
                 query = query.OrderBy(b => b.StockCount);
@@ -212,7 +212,7 @@ namespace Service.Services
                 query = query.OrderByDescending(b => b.StockCount);
             }
 
-            // Sayfalama
+            
             var totalCount = await query.CountAsync();
             var items = await query
                 .Skip((filter.CurrentPage - 1) * filter.PageSize)

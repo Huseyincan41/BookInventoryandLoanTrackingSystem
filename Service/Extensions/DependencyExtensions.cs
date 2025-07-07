@@ -30,11 +30,8 @@ namespace Service.Extensions
 					opt.Password.RequireUppercase = false;
 					opt.Password.RequireDigit = false;
 
-					//opt.User.RequireUniqueEmail = true;  //Aynı email adresinin girilmesini izinverilmez
-					//opt.User.AllowedUserNameCharacters = "abcçdefgğhiıjklmnoöprsştuüvyz"; //kullanıcı adı girilirken izin verilen karakterler.
-
 					opt.Lockout.MaxFailedAccessAttempts = 3;
-					opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); //default = 5
+					opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1); 
 				}).AddEntityFrameworkStores<BookDbContext>();
 
 			services.ConfigureApplicationCookie(opt =>
@@ -42,9 +39,9 @@ namespace Service.Extensions
 
 				opt.LoginPath = new PathString("/Account/Login");
 				opt.LogoutPath = new PathString("/Account/Logout");
-				//opt.AccessDeniedPath = new PathString("/Account/Accessdenied");
+				
 				opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-				opt.SlidingExpiration = true; //10 dk dolmadan yeniden login olursa süre baştan başlar.,
+				opt.SlidingExpiration = true; 
 
 				opt.Cookie = new CookieBuilder()
 				{

@@ -78,7 +78,7 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Edit(string id)
         {
-            var model = await _accountService.GetAllUsersWithRole(id);//servis katamanından geriye UserInOrOutViewModel dönüyor
+            var model = await _accountService.GetAllUsersWithRole(id);
             return View(model);
         }
         [HttpPost]

@@ -34,8 +34,7 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(BookTypes bookType)
         {
-            //if (!ModelState.IsValid)
-            //    return View(bookType);
+            
 
             await _bookTypesService.AddAsync(bookType);
             return RedirectToAction("Index");
@@ -52,8 +51,7 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(BookTypes bookType)
         {
-            //if (!ModelState.IsValid)
-            //    return View(bookType);
+            
 
             await _bookTypesService.UpdateAsync(bookType);
             return RedirectToAction("Index");

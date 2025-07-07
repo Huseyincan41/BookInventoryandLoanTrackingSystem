@@ -25,11 +25,7 @@ namespace BookInventoryAndLoanTrackingSystem.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var books = await _bookService.GetAllAsync();
-        //    return View(books);
-        //}
+        
         public async Task<IActionResult> Index(BookFilterModel filter)
         {
             var booksPaged = await _bookService.GetFilteredBooksAsync(filter);

@@ -124,11 +124,11 @@ namespace Service.Services
 			{
 				if (await _userManager.IsInRoleAsync(user, role.Name))
 				{
-					usersInRole.Add(user);//bu rolde bulunan kullanıcıların listesi
+					usersInRole.Add(user);
 				}
 				else
 				{
-					usersOutRole.Add(user);//bu rolde olmayan kullanıcıların listesi
+					usersOutRole.Add(user);
 				}
 			}
 			UserInOrOutViewModel model = new UserInOrOutViewModel()

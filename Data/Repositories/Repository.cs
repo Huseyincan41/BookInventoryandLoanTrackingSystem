@@ -66,13 +66,13 @@ namespace Data.Repositories
 		{
 			IQueryable<T> query = _dbSet;
 
-			// Eğer bir filter varsa, onu sorguya uygula
+			
 			if (filter != null)
 			{
 				query = query.Where(filter);
 			}
 
-			// Include işlemi varsa, onu da sorguya uygula
+			
 			if (include != null)
 			{
 				query = include(query);
@@ -105,13 +105,13 @@ namespace Data.Repositories
 		{
 			IQueryable<T> query = _dbSet;
 
-			// Eğer bir filter varsa, onu sorguya uygula
+			
 			if (filter != null)
 			{
 				query = query.Where(filter);
 			}
 
-			// Include işlemi varsa, onu da sorguya uygula
+			
 			if (include != null)
 			{
 				query = include(query);

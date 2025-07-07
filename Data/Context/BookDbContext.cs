@@ -41,7 +41,7 @@ namespace Data.Context
 				);
 
 			builder.Entity<Books>().HasData(
-				new Books { Id = 1, BookName = "Yeni Hayat", Writer = "Orhan Pamuk", StockCount = 40, YearOfPublication = new DateTime(1970, 1, 1), BookTypesId =1 }
+				new Books { Id = 1,ImagePath= "efb8add8-15fb-4db0-a1a7-bb9038398943.jpg", BookName = "Raven Suikastçısı", Writer = "Selin Solaris", StockCount = 40, YearOfPublication = new DateTime(1970, 1, 1), BookTypesId =1 }
 
 
 				);
