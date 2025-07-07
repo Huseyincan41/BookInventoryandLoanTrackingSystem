@@ -15,6 +15,6 @@ namespace Entity.Services
         Task AddAsync(BookTypes bookType);
         Task UpdateAsync(BookTypes bookType);
         Task DeleteAsync(int id);
-        //Task<List<SelectListItem>> GetDropdownAsync();
+        
     }
 }

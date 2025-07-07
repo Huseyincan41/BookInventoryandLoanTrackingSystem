@@ -12,7 +12,7 @@ namespace Entity.Models
         public string? Search { get; set; }
         public string? WriterFilter { get; set; }
         public int? BookTypeId { get; set; }
-        public string? StockOrder { get; set; }  // "asc" veya "desc"
+        public string? StockOrder { get; set; }  
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
